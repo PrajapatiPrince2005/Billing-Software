@@ -1,4 +1,4 @@
-<?php include 'db.php'; ?> 
+<?php include 'db.php'; ?>
 <?php
 $editData = null;
 
@@ -12,54 +12,50 @@ if (isset($_GET['edit'])) {
 <!DOCTYPE html>
 <html>
 <head>
-    <title>ગ્રાહક મેનેજ કરો</title>
+    <title>Manage Customers</title>
     <meta charset="UTF-8">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body { background: #8b8985ff; font-family: 'Noto Sans Gujarati', sans-serif; }
+        body { background: #f4f6f9; }
         .container {
-            background:#c9e4ffff;
+            background: #fff;
             padding: 30px;
             border-radius: 15px;
             margin-top: 40px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
-        h3 { text-align: center; margin-bottom: 25px; font-weight: bold; }
+        h3 { text-align: center; margin-bottom: 25px; }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati&display=swap" rel="stylesheet">
 </head>
 <body>
 
 <?php include 'navbar.php'; ?>
 
 <div class="container">
-    <h3>👤 ગ્રાહક મેનેજમેન્ટ</h3>
-<hr style="border: 2px solid black;">
+    <h3>👤 Customer Management</h3>
+
     <!-- Customer Form -->
     <form method="post" class="row g-3">
         <input type="hidden" name="id" value="<?= isset($_GET['edit']) ? $editData['id'] : '' ?>">
 
         <div class="col-md-4">
-            <label>ગ્રાહકનું નામ:</label>
-            <input type="text" name="name" class="form-control" required
-                value="<?= isset($_GET['edit']) ? $editData['name'] : '' ?>"
-                placeholder="નામ દાખલ કરો">
+            <label>Name:</label>
+            <input type="text" name="name" class="form-control"
+                value="<?= isset($_GET['edit']) ? $editData['name'] : '' ?>" required>
         </div>
         <div class="col-md-4">
-            <label>મોબાઇલ નંબર:</label>
+            <label>Phone:</label>
             <input type="text" name="phone" class="form-control"
-                value="<?= isset($_GET['edit']) ? $editData['phone'] : '' ?>"
-                placeholder="મોબાઇલ નંબર દાખલ કરો">
+                value="<?= isset($_GET['edit']) ? $editData['phone'] : '' ?>">
         </div>
         <div class="col-md-4">
-            <label>સરનામું:</label>
+            <label>Address:</label>
             <input type="text" name="address" class="form-control"
-                value="<?= isset($_GET['edit']) ? $editData['address'] : '' ?>"
-                placeholder="સરનામું દાખલ કરો">
+                value="<?= isset($_GET['edit']) ? $editData['address'] : '' ?>">
         </div>
         <div class="col-md-12">
-            <button type="submit" name="<?= isset($_GET['edit']) ? 'update' : 'save' ?>" class="btn btn-primary w-100">
-                <?= isset($_GET['edit']) ? 'અપડેટ કરો' : 'ગ્રાહક ઉમેરો' ?>
+            <button type="submit" name="<?= isset($_GET['edit']) ? 'update' : 'save' ?>" class="btn btn-primary">
+                <?= isset($_GET['edit']) ? 'Update' : 'Add Customer' ?>
             </button>
         </div>
     </form>
@@ -71,14 +67,17 @@ if (isset($_GET['edit'])) {
         <thead class="table-dark">
             <tr>
                 <th>ID</th>
-                <th>નામ</th>
-                <th>મોબાઇલ</th>
-                <th>સરનામું</th>
-                <th>ક્રિયા</th>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Address</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
             <?php
+            // Handle DB connection
+            include 'db.php';
+
             // Save
             if (isset($_POST['save'])) {
                 $name = $_POST['name'];
@@ -105,6 +104,13 @@ if (isset($_GET['edit'])) {
                 echo "<script>window.location='add_customer.php';</script>";
             }
 
+            // Edit
+            if (isset($_GET['edit'])) {
+                $id = $_GET['edit'];
+                $res = $conn->query("SELECT * FROM customers WHERE id=$id");
+                $editData = $res->fetch_assoc();
+            }
+
             // Display table
             $result = $conn->query("SELECT * FROM customers ORDER BY id DESC");
             while ($row = $result->fetch_assoc()) {
@@ -114,8 +120,8 @@ if (isset($_GET['edit'])) {
                     <td>{$row['phone']}</td>
                     <td>{$row['address']}</td>
                     <td>
-                        <a href='add_customer.php?edit={$row['id']}' class='btn btn-sm btn-warning'>ફેરફાર કરો</a>
-                        <a href='add_customer.php?delete={$row['id']}' onclick=\"return confirm('શું તમે ખરેખર ડિલીટ કરવા માંગો છો?')\" class='btn btn-sm btn-danger'>કાઢો</a>
+                        <a href='add_customer.php?edit={$row['id']}' class='btn btn-sm btn-warning'>Edit</a>
+                        <a href='add_customer.php?delete={$row['id']}' onclick=\"return confirm('Delete this customer?')\" class='btn btn-sm btn-danger'>Delete</a>
                     </td>
                 </tr>";
             }

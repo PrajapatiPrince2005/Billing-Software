@@ -1,11 +1,10 @@
-<?php include 'db.php'; ?> 
+<?php include 'db.php'; ?>
 <!DOCTYPE html>
-<html lang="gu">
+<html>
 
 <head>
+    <title>Create Bill</title>
     <meta charset="UTF-8">
-    <title>નવી બિલ બનાવો</title>
-
     <!-- jQuery (required for Select2) -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -42,14 +41,14 @@
     <?php include 'navbar.php'; ?>
 
     <div class="container">
-        <h3>🧾 નવી બિલ બનાવો</h3>
+        <h3>🧾 Create New Bill</h3>
 
         <form method="post">
             <!-- Customer -->
             <div class="mb-3">
-                <label>ગ્રાહક પસંદ કરો:</label>
+                <label>Customer:</label>
                 <select name="customer_id" class="form-select" required onchange="this.form.submit()">
-                    <option value="">-- ગ્રાહક પસંદ કરો --</option>
+                    <option value="">-- Select Customer --</option>
                     <?php
                     $customers = $conn->query("SELECT * FROM customers");
                     while ($c = $customers->fetch_assoc()) {
@@ -63,9 +62,9 @@
             <!-- Vehicle -->
             <?php if (!empty($_POST['customer_id'])): ?>
                 <div class="mb-3">
-                    <label>વાહન પસંદ કરો:</label>
+                    <label>Vehicle:</label>
                     <select name="vehicle_id" class="form-select" required>
-                        <option value="">-- વાહન પસંદ કરો --</option>
+                        <option value="">-- Select Vehicle --</option>
                         <?php
                         $vehicles = $conn->query("SELECT * FROM vehicles WHERE customer_id = {$_POST['customer_id']}");
                         while ($v = $vehicles->fetch_assoc()) {
@@ -77,37 +76,39 @@
 
                 <!-- Part Selection -->
                 <div class="mb-3">
-                    <label>સ્પેર પાર્ટ્સ પસંદ કરો:</label>
+                    <label>Parts:</label>
                     <table class="table table-bordered" id="partsTable">
                         <thead>
                             <tr>
-                                <th>પાર્ટ</th>
-                                <th>જથ્થો</th>
-                                <th>ભાવ (₹)</th>
-                                <th>કુલ</th>
-                                <th>કામ</th>
+                                <th>Part</th>
+                                <th>Qty</th>
+                                <th>Price (₹)</th>
+                                <th>Total</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
                     </table>
-                    <button type="button" class="btn btn-secondary" onclick="addPartRow()">➕ પાર્ટ ઉમેરો</button>
+                    <button type="button" class="btn btn-secondary" onclick="addPartRow()">➕ Add Part</button>
                 </div>
 
-                <div class="mb-3">
-                    <label><strong>મજૂરી ચાર્જ (₹):</strong></label>
-                    <input type="number" name="labour_charge" id="labourCharge" class="form-control" min="0" onchange="calcTotal()" required>
+                <div class="mb-3 ">
+                    <div class="mb-3">
+                        <label><strong>Work Charges / Labour (₹):</strong></label>
+                        <input type="number" name="labour_charge" id="labourCharge" class="form-control" min="0" onchange="calcTotal()" required>
+                    </div>
 
-                    <label class="form-label fw-bold mt-3">કુલ રકમ: ₹<span id="grandTotal">0</span></label><br>
-
-                    <label>લેણી લેનાર પાસેથી ભરપાઈ (₹):</label>
+                    <label class="form-label fw-bold">Grand Total: ₹<span id="grandTotal">0</span></label><br>
+                    <label>Payment Received (₹):</label>
                     <input type="number" name="paid_amount" class="form-control d-inline-block w-25" step="0.01" required>
                 </div>
 
-                <center><button type="submit" name="save_bill" class="btn btn-primary w-50">💾 બિલ સાચવો</button></center>
+
+
+                <center><button type="submit" name="save_bill" class="btn btn-primary w-50">💾 Save Bill</button></center>
             <?php endif; ?>
         </form>
     </div>
-
 
     <!-- JS for Part Add Row -->
     <script>
@@ -241,7 +242,6 @@ if (isset($_POST['save_bill'])) {
     // Calculate remaining due
     $due = $total - $paid_amount;
 
-   echo "<script>alert('✅ ₹$paid_amount મેળવાયા. ₹$due બાકી છે.'); window.location='create_bill.php';</script>";
-
+    echo "<script>alert('✅ ₹$paid_amount received. ₹$due pending.'); window.location='create_bill.php';</script>";
 }
 ?>

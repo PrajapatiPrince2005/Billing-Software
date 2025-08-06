@@ -1,15 +1,15 @@
-<?php include 'db.php'; ?> 
+<?php include 'db.php'; ?>
 <!DOCTYPE html>
 <html>
 <head>
-    <title>ગ્રાહક બાકી ચૂકવણી</title>
+    <title>Customer Dues</title>
     <meta charset="UTF-8">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body { background-color: #f8f9fa; }
         .container {
             margin-top: 40px;
-            background: #ffc9c9ff;
+            background: #fff;
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
@@ -24,29 +24,29 @@
 <?php include 'navbar.php'; ?>
 
 <div class="container">
-    <h3 class="text-center">💰 ગ્રાહક બાકી ચુકવણી</h3>
-<hr style="border: 2px solid black;">
+    <h3 class="text-center">💰 Customer Due Payments</h3>
+
     <form method="get" class="search-box row">
         <div class="col-md-5">
-            <input type="text" name="search" class="form-control" placeholder="ગ્રાહકનું નામ અથવા વિસ્તારો શોધો..." value="<?= $_GET['search'] ?? '' ?>">
+            <input type="text" name="search" class="form-control" placeholder="Search by customer or reach..." value="<?= $_GET['search'] ?? '' ?>">
         </div>
         <div class="col-md-2">
-            <button type="submit" class="btn btn-primary w-100">🔍 શોધો</button>
+            <button type="submit" class="btn btn-primary w-100">🔍 Search</button>
         </div>
         <div class="col-md-2">
-            <a href="customer_dues.php" class="btn btn-secondary w-100">⟳ ફરીથી લાવો</a>
+            <a href="customer_dues.php" class="btn btn-secondary w-100">⟳ Reset</a>
         </div>
     </form>
 
     <table class="table table-bordered table-hover">
         <thead class="table-dark">
             <tr>
-                <th>ગ્રાહક</th>
-                <th>વિસ્તાર</th>
-                <th>કુલ બિલ (₹)</th>
-                <th>ચૂકવેલ રકમ (₹)</th>
-                <th>બાકી રકમ (₹)</th>
-                <th>ક્રિયા</th>
+                <th>Customer</th>
+                <th>Reach</th>
+                <th>Total Bill (₹)</th>
+                <th>Total Paid (₹)</th>
+                <th>Due (₹)</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -73,11 +73,11 @@ if ($result->num_rows > 0) {
             <td>₹{$row['total_bill']}</td>
             <td>₹{$row['total_paid']}</td>
             <td class='text-danger fw-bold'>₹" . number_format($due,2) . "</td>
-            <td><button class='btn btn-sm btn-success' onclick=\"collectDue({$row['customer_id']}, '{$row['name']}', $due)\">ચુકવણી લો</button></td>
+            <td><button class='btn btn-sm btn-success' onclick=\"collectDue({$row['customer_id']}, '{$row['name']}', $due)\">Collect</button></td>
         </tr>";
     }
 } else {
-    echo "<tr><td colspan='6' class='text-center text-muted'>કોઈ બાકી ચુકવણી મળતી નથી</td></tr>";
+    echo "<tr><td colspan='6' class='text-center text-muted'>No dues found</td></tr>";
 }
 ?>
         </tbody>
@@ -89,31 +89,31 @@ if ($result->num_rows > 0) {
   <div class="modal-dialog">
     <form method="post" class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">💵 ચુકવણી મેળવો</h5>
+        <h5 class="modal-title">💵 Collect Payment</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
         <input type="hidden" name="customer_id" id="modal_customer_id">
         <div class="mb-3">
-            <label>ગ્રાહક નામ:</label>
+            <label>Customer Name:</label>
             <input type="text" class="form-control" id="modal_customer_name" disabled>
         </div>
         <div class="mb-3">
-            <label>બાકી રકમ (₹):</label>
+            <label>Due Amount (₹):</label>
             <input type="number" class="form-control" id="modal_due" disabled>
         </div>
         <div class="mb-3">
-            <label>હમણાં મળી ચુકવણી (₹):</label>
+            <label>Payment Received Now (₹):</label>
             <input type="number" name="paid_amount" class="form-control" required>
         </div>
         <div class="mb-3">
-            <label>નોંધ (ફેકલ્ટેટિવ):</label>
+            <label>Note (optional):</label>
             <input type="text" name="note" class="form-control">
         </div>
       </div>
       <div class="modal-footer">
-        <button type="submit" name="collect_now" class="btn btn-success">💾 સેવ કરો</button>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">રદ કરો</button>
+        <button type="submit" name="collect_now" class="btn btn-success">💾 Save Payment</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
       </div>
     </form>
   </div>
@@ -138,7 +138,7 @@ if (isset($_POST['collect_now'])) {
     $amount = $_POST['paid_amount'];
     $note = $_POST['note'];
     $conn->query("INSERT INTO customer_payments (customer_id, bill_id, paid_amount, note) VALUES ('$cid', NULL, '$amount', '$note')");
-    echo "<script>alert('✅ ₹$amount ચુકવણી સેવ થઈ ગઈ છે.'); window.location='customer_dues.php';</script>";
+    echo "<script>alert('✅ Payment of ₹$amount saved.'); window.location='customer_dues.php';</script>";
 }
 ?>
 

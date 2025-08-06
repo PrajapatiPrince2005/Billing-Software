@@ -41,8 +41,8 @@ $items = $conn->query("SELECT bi.*, sp.part_name
 <button class="print-btn" onclick="window.print()">🖨 Print</button>
 
 <div class="header">
-    <h2>મહેસાણા ઓટો પાર્ટ્સ એન્ડ ગેરેજ</h2>
-    <small>સંસ્થાપના: ૨૦૦૭ | જય શ્રી મેલડી કૃપા</small>
+    <h2>MESHNA AUTO PARTS & GERAJ</h2>
+    <small>Since 2007 | Jay Shree Meldi Krupa</small>
     <hr>
 </div>
 

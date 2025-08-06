@@ -1,37 +1,30 @@
-<?php include 'db.php'; ?> 
+<?php include 'db.php'; ?>
 <?php
 $editData = null;
+
+// Handle Edit
 if (isset($_GET['edit'])) {
     $id = $_GET['edit'];
     $res = $conn->query("SELECT * FROM vehicles WHERE id = $id");
     $editData = $res->fetch_assoc();
 }
 ?>
-
 <!DOCTYPE html>
-<html lang="gu">
+<html>
 <head>
-    <title> વાહન મેનેજમેન્ટ | MESHNA AUTO</title>
+    <title>Manage Vehicles</title>
     <meta charset="UTF-8">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati&display=swap" rel="stylesheet">
     <style>
-        body {
-            background-color: #f0f4f8;
-            font-family: 'Noto Sans Gujarati', sans-serif;
-        }
+        body { background-color: #f0f4f8; }
         .container {
-            background: #d1cec3ff;
+            background: #fff;
             padding: 30px;
             border-radius: 15px;
             margin-top: 40px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
-        h3 {
-            text-align: center;
-            margin-bottom: 25px;
-            font-weight: bold;
-        }
+        h3 { text-align: center; margin-bottom: 25px; }
     </style>
 </head>
 <body>
@@ -39,16 +32,16 @@ if (isset($_GET['edit'])) {
 <?php include 'navbar.php'; ?>
 
 <div class="container">
-    <h3>🚘 વાહન મેનેજમેન્ટ</h3>
-<hr style="border: 2px solid black;">
+    <h3>🚘 Vehicle Management</h3>
+
     <!-- Form -->
     <form method="post" class="row g-3">
         <input type="hidden" name="id" value="<?= isset($_GET['edit']) ? $editData['id'] : '' ?>">
 
         <div class="col-md-4">
-            <label>ગ્રાહક પસંદ કરો:</label>
+            <label>Customer:</label>
             <select name="customer_id" class="form-select" required>
-                <option value="">-- ગ્રાહક પસંદ કરો --</option>
+                <option value="">-- Select Customer --</option>
                 <?php
                 $customers = $conn->query("SELECT * FROM customers");
                 while ($c = $customers->fetch_assoc()) {
@@ -60,65 +53,62 @@ if (isset($_GET['edit'])) {
         </div>
 
         <div class="col-md-4">
-            <label>વાહન નંબર:</label>
-            <input type="text" name="vehicle_number" class="form-control" required
-                placeholder="જેમ કે: GJ05BR1234"
-                value="<?= isset($_GET['edit']) ? $editData['vehicle_number'] : '' ?>">
+            <label>Vehicle Number:</label>
+            <input type="text" name="vehicle_number" class="form-control"
+                   value="<?= isset($_GET['edit']) ? $editData['vehicle_number'] : '' ?>" required>
         </div>
 
         <div class="col-md-4">
-            <label>મોડેલ:</label>
+            <label>Model:</label>
             <input type="text" name="model" class="form-control"
-                placeholder="મોડેલ લખો (જેમ કે Activa, Splendor...)"
-                value="<?= isset($_GET['edit']) ? $editData['model'] : '' ?>">
+                   value="<?= isset($_GET['edit']) ? $editData['model'] : '' ?>">
         </div>
 
         <div class="col-md-4">
-            <label>બ્રાન્ડ:</label>
+            <label>Brand:</label>
             <input type="text" name="brand" class="form-control"
-                placeholder="જેમ કે Hero, Honda..."
-                value="<?= isset($_GET['edit']) ? $editData['brand'] : '' ?>">
+                   value="<?= isset($_GET['edit']) ? $editData['brand'] : '' ?>">
         </div>
 
         <div class="col-md-4">
-            <label>ઇંધણનો પ્રકાર:</label>
+            <label>Fuel Type:</label>
             <select name="fuel_type" class="form-select">
-                <option value="">-- પસંદ કરો --</option>
+                <option value="">-- Select --</option>
                 <?php
-                $fuels = ['Diesel' => 'ડીઝલ', 'Petrol' => 'પેટ્રોલ', 'CNG' => 'સી.એન.જી.'];
-                foreach ($fuels as $value => $label) {
-                    $selected = (isset($_GET['edit']) && $editData['fuel_type'] == $value) ? "selected" : "";
-                    echo "<option value='$value' $selected>$label</option>";
+                $fuels = ['Diesel', 'Petrol', 'CNG'];
+                foreach ($fuels as $fuel) {
+                    $selected = (isset($_GET['edit']) && $editData['fuel_type'] == $fuel) ? "selected" : "";
+                    echo "<option value='$fuel' $selected>$fuel</option>";
                 }
                 ?>
             </select>
         </div>
 
         <div class="col-md-12">
-            <button type="submit" name="<?= isset($_GET['edit']) ? 'update' : 'save' ?>" class="btn btn-primary w-100">
-                <?= isset($_GET['edit']) ? 'અપડેટ કરો' : 'વાહન ઉમેરો' ?>
+            <button type="submit" name="<?= isset($_GET['edit']) ? 'update' : 'save' ?>" class="btn btn-primary">
+                <?= isset($_GET['edit']) ? 'Update Vehicle' : 'Add Vehicle' ?>
             </button>
         </div>
     </form>
 
     <hr>
 
-    <!-- Vehicle List -->
+    <!-- List of Vehicles -->
     <table class="table table-bordered mt-4">
         <thead class="table-dark">
             <tr>
                 <th>ID</th>
-                <th>ગ્રાહક</th>
-                <th>વાહન નં</th>
-                <th>મોડેલ</th>
-                <th>બ્રાન્ડ</th>
-                <th>ઇંધણ</th>
-                <th>ક્રિયા</th>
+                <th>Customer</th>
+                <th>Vehicle No</th>
+                <th>Model</th>
+                <th>Brand</th>
+                <th>Fuel</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
             <?php
-            // Insert New
+            // Save
             if (isset($_POST['save'])) {
                 $customer_id = $_POST['customer_id'];
                 $vehicle_number = $_POST['vehicle_number'];
@@ -150,7 +140,7 @@ if (isset($_GET['edit'])) {
                 echo "<script>window.location='add_vehicle.php';</script>";
             }
 
-            // Table
+            // View Table
             $result = $conn->query("SELECT vehicles.*, customers.name AS customer_name FROM vehicles 
                                     JOIN customers ON vehicles.customer_id = customers.id ORDER BY vehicles.id DESC");
 
@@ -163,8 +153,8 @@ if (isset($_GET['edit'])) {
                         <td>{$row['brand']}</td>
                         <td>{$row['fuel_type']}</td>
                         <td>
-                            <a href='add_vehicle.php?edit={$row['id']}' class='btn btn-sm btn-warning'>ફેરફાર</a>
-                            <a href='add_vehicle.php?delete={$row['id']}' onclick=\"return confirm('શું વાસ્તવમાં કાઢી નાખવું છે?')\" class='btn btn-sm btn-danger'>કાઢો</a>
+                            <a href='add_vehicle.php?edit={$row['id']}' class='btn btn-sm btn-warning'>Edit</a>
+                            <a href='add_vehicle.php?delete={$row['id']}' onclick=\"return confirm('Delete this vehicle?')\" class='btn btn-sm btn-danger'>Delete</a>
                         </td>
                     </tr>";
             }

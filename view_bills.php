@@ -1,32 +1,21 @@
 <?php include 'db.php'; ?>
 <!DOCTYPE html>
-<html lang="gu">
+<html>
 <head>
-    <title>📑 બિલ વિગત</title>
+    <title>📑 View Bills</title>
     <meta charset="UTF-8">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati&display=swap" rel="stylesheet">
     <style>
-        body {
-            background-color: #f0f4f8;
-            font-family: 'Noto Sans Gujarati', sans-serif;
-        }
+        body { background: #f0f4f8; }
         .container {
-            background: #cdffc9ff;
+            background: #fff;
+            margin-top: 40px;
             padding: 30px;
             border-radius: 15px;
-            margin-top: 40px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
-        h3 {
-            text-align: center;
-            margin-bottom: 25px;
-            font-weight: bold;
-        }
-        .highlight {
-            font-weight: bold;
-            color: #2c3e50;
-        }
+        .modal-title { font-weight: bold; }
+        .highlight { font-weight: bold; color: #2c3e50; }
     </style>
 </head>
 <body>
@@ -34,32 +23,32 @@
 <?php include 'navbar.php'; ?>
 
 <div class="container">
-    <h3>📑 તમામ બિલ</h3>
-<hr style="border: 2px solid black;">
-    <!-- 🔍 શોધ ફોર્મ -->
+    <h3 class="text-center">📑 All Bills</h3>
+
+    <!-- 🔍 Search Form -->
     <form method="get" class="row mb-4">
         <div class="col-md-5">
-            <input type="text" name="search" class="form-control" placeholder="બિલ નં, ગ્રાહક, વાહન અથવા તારીખથી શોધો" value="<?= $_GET['search'] ?? '' ?>">
+            <input type="text" name="search" class="form-control" placeholder="Search by Bill ID, Customer, Vehicle or Date" value="<?= $_GET['search'] ?? '' ?>">
         </div>
         <div class="col-md-2">
-            <button type="submit" class="btn btn-primary w-100">🔍 શોધો</button>
+            <button type="submit" class="btn btn-primary w-100">🔍 Search</button>
         </div>
         <div class="col-md-2">
-            <a href="view_bills.php" class="btn btn-secondary w-100">⟳ રીસેટ કરો</a>
+            <a href="view_bills.php" class="btn btn-secondary w-100">⟳ Reset</a>
         </div>
     </form>
 
     <table class="table table-bordered table-hover">
         <thead class="table-dark">
             <tr>
-                <th>બિલ નં</th>
-                <th>ગ્રાહક</th>
-                <th>વાહન નં</th>
-                <th>પાર્ટ્સ ₹</th>
-                <th>મજૂરી ₹</th>
-                <th>કુલ રકમ ₹</th>
-                <th>તારીખ</th>
-                <th>ક્રિયા</th>
+                <th>Bill ID</th>
+                <th>Customer</th>
+                <th>Vehicle</th>
+                <th>Parts (₹)</th>
+                <th>Labour (₹)</th>
+                <th>Grand Total (₹)</th>
+                <th>Date</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -92,39 +81,52 @@
                     <td class='highlight'>₹" . number_format($grandTotal, 2) . "</td>
                     <td>{$row['bill_date']}</td>
                     <td>
-                        <button class='btn btn-sm btn-info' onclick='viewItems({$row['id']})'>જુઓ</button>
-                        <a href='print_bill.php?bill_id={$row['id']}' target='_blank' class='btn btn-sm btn-secondary'>🖨 છાપો</a>
+                        <button class='btn btn-sm btn-info' onclick='viewItems({$row['id']})'>View</button>
+                        <a href='print_bill.php?bill_id={$row['id']}' target='_blank' class='btn btn-sm btn-secondary'>🖨 Print</a>
                     </td>
                 </tr>";
             }
         } else {
-            echo "<tr><td colspan='8' class='text-center text-muted'>❌ બિલ મળ્યા નથી.</td></tr>";
+            echo "<tr><td colspan='8' class='text-center text-muted'>No bills found.</td></tr>";
         }
         ?>
         </tbody>
     </table>
 </div>
 
-<!-- Modal - Bill View -->
+<!-- View Items Modal -->
 <div class="modal fade" id="itemsModal" tabindex="-1">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">🧾 બિલ વિગત</h5>
+        <h5 class="modal-title">🧾 Bill Details</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body" id="billItemsContent">
-        <div id="printArea">Loading...</div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-secondary" onclick="printBillContent()">🖨 છાપો</button>
-      </div>
+    <div id="printArea">Loading...</div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-secondary" onclick="printBillContent()">🖨 Print</button>
+</div>
+
     </div>
   </div>
 </div>
 
-<!-- JS -->
+<!-- Bootstrap JS + AJAX -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+function viewItems(billId) {
+    fetch('view_bill_items.php?bill_id=' + billId)
+        .then(res => res.text())
+        .then(data => {
+            document.getElementById('billItemsContent').innerHTML = data;
+            var modal = new bootstrap.Modal(document.getElementById('itemsModal'));
+            modal.show();
+        });
+}
+
+</script>
 <script>
 function viewItems(billId) {
     fetch('view_bill_items.php?bill_id=' + billId)

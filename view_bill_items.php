@@ -17,6 +17,7 @@ $items = $conn->query("
     JOIN stock_parts sp ON bi.part_id = sp.id
     WHERE bi.bill_id = $bill_id
 ");
+
 echo "<table class='table table-bordered'>
         <thead class='table-light'>
             <tr>

@@ -20,7 +20,7 @@ if (!isset($_SESSION['admin'])) {
             font-family: 'Segoe UI', sans-serif;
         }
         .main-card {
-            background: #d1f1dfff;
+            background: #ffffff;
             padding: 40px;
             border-radius: 20px;
             box-shadow: 0 8px 24px rgba(0,0,0,0.1);
@@ -65,8 +65,6 @@ if (!isset($_SESSION['admin'])) {
             }
         }
     </style>
-    <link rel="stylesheet" href="cursor.css">
-<script src="cursor.js" defer></script>
 </head>
 <body>
 
@@ -74,24 +72,20 @@ if (!isset($_SESSION['admin'])) {
 
 <div class="container">
     <div class="main-card">
-        <h2>મહેસાણા ઓટો પાર્ટ્સ એન્ડ ગેરેજ</h2>
-<p class="text-muted">સંસ્થાપના: ૨૦૦૭ | જય શ્રી મેલડી કૃપા</p>
-<hr style="border: 3px solid black;">
+        <h2>MESHNA AUTO PARTS & GERAJ</h2>
+        <p class="text-muted">SINCE 2007 | Jay Shree Meldi Krupa</p>
 
-       <div class="btn-grid">
-    <a href="add_customer.php" class="btn btn-primary btn-lg">👤 ગ્રાહક ઉમેરો</a>
-    <a href="add_vehicle.php" class="btn btn-secondary btn-lg">🚘 વાહન ઉમેરો</a>
-    <a href="create_bill.php" class="btn btn-success btn-lg">🧾 બિલ બનાવો</a>
-    <a href="add_part.php" class="btn btn-warning btn-lg">➕ સ્ટોક ઉમેરો</a>
-    <a href="view_stock.php" class="btn btn-warning btn-lg">📦 સ્ટોક જુઓ</a>
-    <a href="view_customers.php" class="btn btn-primary btn-lg">👥 ગ્રાહકો જુઓ</a>
-    <a href="view_bills.php" class="btn btn-success btn-lg">📑 બિલ્સ જુઓ</a>
-    <a href="customer_dues.php" class="btn btn-outline-danger btn-lg">📑 બાકી રકમ</a>
-    <a href="simple_billing.php" class="btn btn-success btn-lg">🧾 સરળ - બિલ બનાવો</a>
-    <a href="logout.php" class="btn btn-outline-danger btn-lg">🔒 લોગઆઉટ</a>
-    
-</div>
-
+        <div class="btn-grid">
+            <a href="add_customer.php" class="btn btn-primary btn-lg">👤 Add Customer</a>
+            <a href="add_vehicle.php" class="btn btn-secondary btn-lg">🚘 Add Vehicle</a>
+            <a href="create_bill.php" class="btn btn-success btn-lg">🧾 Create Bill</a>
+            <a href="add_part.php" class="btn btn-warning btn-lg">➕ Add Inventory</a>
+            <a href="view_stock.php" class="btn btn-info btn-lg">📦 View Stock</a>
+            <a href="view_customers.php" class="btn btn-dark btn-lg">👥 View Customers</a>
+            <a href="view_bills.php" class="btn btn-outline-success btn-lg">📑 View Bills</a>
+            <a href="customer_dues.php" class="btn btn-outline-success btn-lg">📑 Customer Dues</a>
+            <a href="logout.php" class="btn btn-outline-danger btn-lg">🔒 Logout</a>
+        </div>
     </div>
 </div>
 

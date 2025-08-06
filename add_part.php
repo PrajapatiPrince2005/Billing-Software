@@ -1,19 +1,18 @@
-<?php include 'db.php'; ?> 
+<?php include 'db.php'; ?>
 <!DOCTYPE html>
-<html lang="gu">
+<html>
+
 <head>
-    <title>ઈન્વેન્ટરી ઉમેરો | MESHNA AUTO GERAJ</title>
+    <title>Add Inventory | MESHNA AUTO GERAJ</title>
     <meta charset="UTF-8">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati&display=swap" rel="stylesheet">
     <style>
         body {
             background-color: #f0f4f8;
-            font-family: 'Noto Sans Gujarati', sans-serif;
         }
 
         .container {
-            background: #ffee9bff;
+            background: #fff;
             padding: 30px;
             border-radius: 15px;
             margin-top: 40px;
@@ -27,54 +26,63 @@
             font-weight: bold;
         }
     </style>
+    <!-- jQuery (required for Select2) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Select2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
 </head>
 
 <body>
 
-<?php include 'navbar.php'; ?>
+    <?php include 'navbar.php'; ?>
 
-<div class="container">
-    <h3>🛠️ નવા પાર્ટ્સ ઉમેરો</h3>
-<hr style="border: 2px solid black;">
-    <form method="post" class="row g-3">
-        <div class="col-md-6">
-            <label>પાર્ટ નંબર:</label>
-            <input type="text" name="part_number" class="form-control" placeholder="જેમ કે: 0123-A12" required>
-        </div>
-        <div class="col-md-6">
-            <label>પાર્ટ નામ:</label>
-            <input type="text" name="part_name" class="form-control" placeholder="જેમ કે: Oil Filter" required>
-        </div>
-        <div class="col-md-4">
-            <label>જથ્થો:</label>
-            <input type="number" name="quantity" class="form-control" placeholder="જેમ કે: 10" required>
-        </div>
-        <div class="col-md-4">
-            <label>ખરીદ કિંમત (₹):</label>
-            <input type="number" step="0.01" name="purchase_price" class="form-control" placeholder="જેમ કે: 120.50" required>
-        </div>
-        <div class="col-md-4">
-            <label>વેચાણ કિંમત (₹):</label>
-            <input type="number" step="0.01" name="sell_price" class="form-control" placeholder="જેમ કે: 150.00" required>
-        </div>
-        <div class="col-md-6">
-            <label>સપ્લાયરનું નામ:</label>
-            <input type="text" name="supplier" class="form-control" placeholder="જેમ કે: Raju Auto Traders">
-        </div>
-        <div class="col-md-6">
-            <label>ખરીદ તારીખ:</label>
-            <input type="date" name="purchase_date" class="form-control" required>
-        </div>
-        <div class="col-md-12">
-            <button type="submit" name="save" class="btn btn-success w-100">💾 પાર્ટ ઉમેરો</button>
-        </div>
-    </form>
-</div>
+    <div class="container">
+        <h3>➕ Add New Inventory Part</h3>
+
+        <!-- Inventory Add Form -->
+        <form method="post" class="row g-3">
+            <div class="col-md-6">
+                <label>Part Number (Code):</label>
+                <input type="text" name="part_number" class="form-control" required>
+            </div>
+            <div class="col-md-6">
+                <label>Part Name:</label>
+                <input type="text" name="part_name" class="form-control" required>
+            </div>
+            <div class="col-md-4">
+                <label>Quantity:</label>
+                <input type="number" name="quantity" class="form-control" required>
+            </div>
+            <div class="col-md-4">
+                <label>Purchase Price (₹):</label>
+                <input type="number" step="0.01" name="purchase_price" class="form-control" required>
+            </div>
+            <div class="col-md-4">
+                <label>Sell Price (₹):</label>
+                <input type="number" step="0.01" name="sell_price" class="form-control" required>
+            </div>
+            <div class="col-md-6">
+                <label>Supplier:</label>
+                <input type="text" name="supplier" class="form-control">
+            </div>
+            <div class="col-md-6">
+                <label>Purchase Date:</label>
+                <input type="date" name="purchase_date" class="form-control" required>
+            </div>
+            <div class="col-md-12">
+                <button type="submit" name="save" class="btn btn-primary w-100">💾 Save Part</button>
+            </div>
+        </form>
+    </div>
 
 </body>
+
 </html>
 
 <?php
+// Insert part into DB
 if (isset($_POST['save'])) {
     $part_number = $_POST['part_number'];
     $part_name = $_POST['part_name'];
@@ -88,9 +96,9 @@ if (isset($_POST['save'])) {
             VALUES ('$part_number', '$part_name', '$quantity', '$purchase_price', '$sell_price', '$supplier', '$purchase_date')";
 
     if ($conn->query($sql)) {
-        echo "<script>alert('✅ પાર્ટ સફળતાપૂર્વક ઉમેરવામાં આવ્યો'); window.location='add_part.php';</script>";
+        echo "<script>alert('✅ Part added successfully'); window.location='add_part.php';</script>";
     } else {
-        echo "<div class='alert alert-danger m-3'>❌ ભૂલ: " . $conn->error . "</div>";
+        echo "<div class='alert alert-danger m-3'>❌ Error: " . $conn->error . "</div>";
     }
 }
 ?>
