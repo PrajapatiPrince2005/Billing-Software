@@ -80,14 +80,13 @@ if (!isset($_SESSION['admin'])) {
 
        <div class="btn-grid">
     <a href="add_customer.php" class="btn btn-primary btn-lg">👤 ગ્રાહક ઉમેરો</a>
-    <a href="add_vehicle.php" class="btn btn-secondary btn-lg">🚘 વાહન ઉમેરો</a>
     <a href="create_bill.php" class="btn btn-success btn-lg">🧾 બિલ બનાવો</a>
     <a href="add_part.php" class="btn btn-warning btn-lg">➕ સ્ટોક ઉમેરો</a>
-    <a href="view_stock.php" class="btn btn-warning btn-lg">📦 સ્ટોક જુઓ</a>
+    <a href="simple_billing.php" class="btn btn-success btn-lg">🧾 સરળ - બિલ બનાવો</a>
     <a href="view_customers.php" class="btn btn-primary btn-lg">👥 ગ્રાહકો જુઓ</a>
     <a href="view_bills.php" class="btn btn-success btn-lg">📑 બિલ્સ જુઓ</a>
+    <a href="view_stock.php" class="btn btn-warning btn-lg">📦 સ્ટોક જુઓ</a>
     <a href="customer_dues.php" class="btn btn-outline-danger btn-lg">📑 બાકી રકમ</a>
-    <a href="simple_billing.php" class="btn btn-success btn-lg">🧾 સરળ - બિલ બનાવો</a>
     <a href="logout.php" class="btn btn-outline-danger btn-lg">🔒 લોગઆઉટ</a>
     
 </div>

@@ -92,11 +92,10 @@
       <ul class="navbar-nav">
         <li class="nav-item"><a class="nav-link" href="index.php">🏠 હોમપેજ</a></li>
         <li class="nav-item"><a class="nav-link" href="add_customer.php">👤 ગ્રાહક ઉમેરો</a></li>
-        <li class="nav-item"><a class="nav-link" href="add_vehicle.php">🚘 વાહન ઉમેરો</a></li>
-        <li class="nav-item"><a class="nav-link" href="add_part.php">🛒 સ્ટોક ઉમેરો</a></li>
-        <li class="nav-item"><a class="nav-link" href="view_stock.php">📦 સ્ટોક જુઓ</a></li>
         <li class="nav-item"><a class="nav-link" href="create_bill.php">🧾 બિલ બનાવો</a></li>
         <li class="nav-item"><a class="nav-link" href="view_bills.php">📑 બિલ્સ જુઓ</a></li>
+        <li class="nav-item"><a class="nav-link" href="add_part.php">🛒 સ્ટોક ઉમેરો</a></li>
+        <li class="nav-item"><a class="nav-link" href="view_stock.php">📦 સ્ટોક જુઓ</a></li>
         <li class="nav-item"><a class="nav-link" href="view_customers.php">👥 ગ્રાહકો જુઓ</a></li>
         <li class="nav-item"><a class="nav-link text-danger" href="logout.php">🔒 લૉગઆઉટ</a></li>
       </ul>

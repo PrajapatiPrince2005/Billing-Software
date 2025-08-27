@@ -40,41 +40,46 @@
 
     <table class="table table-bordered table-hover">
         <thead class="table-dark">
-            <tr>
-                <th>ગ્રાહક</th>
-                <th>વિસ્તાર</th>
-                <th>કુલ બિલ (₹)</th>
-                <th>ચૂકવેલ રકમ (₹)</th>
-                <th>બાકી રકમ (₹)</th>
-                <th>ક્રિયા</th>
-            </tr>
-        </thead>
+    <tr>
+        <th>ગ્રાહક</th>
+        <th>મોબાઇલ</th>
+        <th>વાહન નંબર</th>
+        <th>કુલ બિલ (₹)</th>
+        <th>ચૂકવેલ રકમ (₹)</th>
+        <th>બાકી રકમ (₹)</th>
+        <th>ક્રિયા</th>
+    </tr>
+</thead>
+
         <tbody>
 <?php
 $search = isset($_GET['search']) ? $_GET['search'] : '';
 $sql = "
-    SELECT c.id AS customer_id, c.name, c.reach,
+    SELECT c.id AS customer_id, c.name, c.phone, c.vehicle_number,
         COALESCE(SUM(b.total_amount),0) AS total_bill,
         COALESCE((SELECT SUM(p.paid_amount) FROM customer_payments p WHERE p.customer_id = c.id),0) AS total_paid
     FROM customers c
     LEFT JOIN bills b ON b.customer_id = c.id
-    WHERE c.name LIKE '%$search%' OR c.reach LIKE '%$search%'
+    WHERE c.name LIKE '%$search%' OR c.phone LIKE '%$search%' OR c.vehicle_number LIKE '%$search%'
     GROUP BY c.id
     HAVING total_bill > total_paid
     ORDER BY c.name ASC";
+
 
 $result = $conn->query($sql);
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         $due = $row['total_bill'] - $row['total_paid'];
         echo "<tr>
-            <td>{$row['name']}</td>
-            <td>{$row['reach']}</td>
-            <td>₹{$row['total_bill']}</td>
-            <td>₹{$row['total_paid']}</td>
-            <td class='text-danger fw-bold'>₹" . number_format($due,2) . "</td>
-            <td><button class='btn btn-sm btn-success' onclick=\"collectDue({$row['customer_id']}, '{$row['name']}', $due)\">ચુકવણી લો</button></td>
-        </tr>";
+    <td>{$row['name']}</td>
+    <td>{$row['phone']}</td>
+    <td>{$row['vehicle_number']}</td>
+    <td>₹{$row['total_bill']}</td>
+    <td>₹{$row['total_paid']}</td>
+    <td class='text-danger fw-bold'>₹" . number_format($due,2) . "</td>
+    <td><button class='btn btn-sm btn-success' onclick=\"collectDue({$row['customer_id']}, '{$row['name']}', $due)\">ચુકવણી લો</button></td>
+</tr>";
+
     }
 } else {
     echo "<tr><td colspan='6' class='text-center text-muted'>કોઈ બાકી ચુકવણી મળતી નથી</td></tr>";

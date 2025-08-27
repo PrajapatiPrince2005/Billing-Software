@@ -65,19 +65,18 @@
         <tbody>
         <?php
         $search = isset($_GET['search']) ? $conn->real_escape_string($_GET['search']) : '';
-        $sql = "
-            SELECT b.id, b.total_amount, b.labour_charge, b.bill_date,
-                   c.name AS customer_name,
-                   v.vehicle_number
-            FROM bills b
-            JOIN customers c ON b.customer_id = c.id
-            JOIN vehicles v ON b.vehicle_id = v.id
-            WHERE 
-                b.id LIKE '%$search%' OR
-                c.name LIKE '%$search%' OR
-                v.vehicle_number LIKE '%$search%' OR
-                b.bill_date LIKE '%$search%'
-            ORDER BY b.id DESC";
+       $sql = "
+    SELECT b.id, b.total_amount, b.labour_charge, b.bill_date,
+           c.name AS customer_name,
+           b.vehicle_number
+    FROM bills b
+    JOIN customers c ON b.customer_id = c.id
+    WHERE 
+        b.id LIKE '%$search%' OR
+        c.name LIKE '%$search%' OR
+        b.vehicle_number LIKE '%$search%' OR
+        b.bill_date LIKE '%$search%'
+    ORDER BY b.id DESC";
 
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {

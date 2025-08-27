@@ -34,29 +34,37 @@ if (isset($_GET['edit'])) {
 
 <div class="container">
     <h3>👤 ગ્રાહક મેનેજમેન્ટ</h3>
-<hr style="border: 2px solid black;">
+    <hr style="border: 2px solid black;">
+
     <!-- Customer Form -->
     <form method="post" class="row g-3">
         <input type="hidden" name="id" value="<?= isset($_GET['edit']) ? $editData['id'] : '' ?>">
 
-        <div class="col-md-4">
+        <div class="col-md-3">
             <label>ગ્રાહકનું નામ:</label>
             <input type="text" name="name" class="form-control" required
                 value="<?= isset($_GET['edit']) ? $editData['name'] : '' ?>"
                 placeholder="નામ દાખલ કરો">
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
             <label>મોબાઇલ નંબર:</label>
             <input type="text" name="phone" class="form-control"
                 value="<?= isset($_GET['edit']) ? $editData['phone'] : '' ?>"
                 placeholder="મોબાઇલ નંબર દાખલ કરો">
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
+            <label>વાહન નંબર:</label>
+            <input type="text" name="vehicle_number" class="form-control"
+                value="<?= isset($_GET['edit']) ? $editData['vehicle_number'] : '' ?>"
+                placeholder="વાહન નંબર દાખલ કરો">
+        </div>
+        <div class="col-md-3">
             <label>સરનામું:</label>
             <input type="text" name="address" class="form-control"
                 value="<?= isset($_GET['edit']) ? $editData['address'] : '' ?>"
                 placeholder="સરનામું દાખલ કરો">
         </div>
+        
         <div class="col-md-12">
             <button type="submit" name="<?= isset($_GET['edit']) ? 'update' : 'save' ?>" class="btn btn-primary w-100">
                 <?= isset($_GET['edit']) ? 'અપડેટ કરો' : 'ગ્રાહક ઉમેરો' ?>
@@ -73,6 +81,7 @@ if (isset($_GET['edit'])) {
                 <th>ID</th>
                 <th>નામ</th>
                 <th>મોબાઇલ</th>
+                <th>વાહન નંબર</th>
                 <th>સરનામું</th>
                 <th>ક્રિયા</th>
             </tr>
@@ -83,8 +92,10 @@ if (isset($_GET['edit'])) {
             if (isset($_POST['save'])) {
                 $name = $_POST['name'];
                 $phone = $_POST['phone'];
+                $vehicle_number = $_POST['vehicle_number'];
                 $address = $_POST['address'];
-                $conn->query("INSERT INTO customers (name, phone, address) VALUES ('$name', '$phone', '$address')");
+                $conn->query("INSERT INTO customers (name, phone, vehicle_number, address) 
+                              VALUES ('$name', '$phone', '$vehicle_number', '$address')");
                 echo "<script>window.location='add_customer.php';</script>";
             }
 
@@ -93,8 +104,11 @@ if (isset($_GET['edit'])) {
                 $id = $_POST['id'];
                 $name = $_POST['name'];
                 $phone = $_POST['phone'];
+                $vehicle_number = $_POST['vehicle_number'];
                 $address = $_POST['address'];
-                $conn->query("UPDATE customers SET name='$name', phone='$phone', address='$address' WHERE id=$id");
+                $conn->query("UPDATE customers 
+                              SET name='$name', phone='$phone', vehicle_number='$vehicle_number', address='$address' 
+                              WHERE id=$id");
                 echo "<script>window.location='add_customer.php';</script>";
             }
 
@@ -112,6 +126,7 @@ if (isset($_GET['edit'])) {
                     <td>{$row['id']}</td>
                     <td>{$row['name']}</td>
                     <td>{$row['phone']}</td>
+                    <td>{$row['vehicle_number']}</td>
                     <td>{$row['address']}</td>
                     <td>
                         <a href='add_customer.php?edit={$row['id']}' class='btn btn-sm btn-warning'>ફેરફાર કરો</a>
